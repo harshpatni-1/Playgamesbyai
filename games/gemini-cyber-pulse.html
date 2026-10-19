@@ -1,39 +1,152 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>CYBER PULSE</title>
     <style>
-        * { box-sizing: border-box; user-select: none; margin: 0; padding: 0; }
-        body, html { width: 100%; height: 100%; overflow: hidden; background: #05050f; font-family: monospace; color: #fff; }
-        #canvas-wrap { position: relative; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; background: #000; }
-        canvas { display: block; touch-action: none; }
-        .screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; background: rgba(5, 5, 15, 0.92); z-index: 10; transition: opacity 0.1s; }
-        .screen.hidden { opacity: 0; pointer-events: none; }
-        h1 { font-size: 3.5rem; font-style: italic; color: #00ffff; text-shadow: 0 0 20px #00ffff, 0 0 40px #ff007f; margin-bottom: 10px; }
-        p.sub { font-size: 1rem; color: #8899cc; letter-spacing: 2px; margin-bottom: 30px; text-transform: uppercase; }
-        .btn { background: #ff0055; border: 2px solid #ff88cc; color: #fff; font-size: 1.1rem; font-weight: bold; padding: 14px 40px; border-radius: 6px; cursor: pointer; text-transform: uppercase; letter-spacing: 2px; box-shadow: 0 0 15px rgba(255,0,85,0.4); margin: 8px; min-width: 200px; text-align: center; }
-        .btn:hover { background: #ff1a6c; transform: scale(1.03); }
-        .btn.sec { background: rgba(20,25,50,0.9); border-color: #00ffff; }
-        .btn.sec:hover { background: rgba(30,40,80,0.9); }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; max-width: 750px; width: 85%; margin-bottom: 25px; }
-        .card { background: rgba(12,16,35,0.95); border: 2px solid #223366; border-radius: 6px; padding: 15px; text-align: center; cursor: pointer; transition: 0.15s; }
-        .card:hover { border-color: #00ffff; transform: translateY(-3px); box-shadow: 0 5px 20px rgba(0,255,255,0.3); }
-        .card h3 { font-size: 1.1rem; margin-bottom: 6px; color: #fff; }
-        .card p { font-size: 0.8rem; color: #00ffff; }
-        .card .best { margin-top: 8px; font-size: 0.8rem; color: #ff00ff; font-weight: bold; }
-        #hud { position: absolute; top: 0; left: 0; width: 100%; padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; pointer-events: none; z-index: 5; }
-        #hud.hidden { display: none; }
-        .hud-btn { background: rgba(12,16,35,0.8); border: 2px solid #00ffff; color: #00ffff; width: 40px; height: 40px; border-radius: 6px; font-size: 1.1rem; display: flex; justify-content: center; align-items: center; cursor: pointer; pointer-events: auto; }
-        .progress-wrap { width: 400px; max-width: 45vw; display: flex; flex-direction: column; align-items: center; gap: 4px; }
-        .bar-bg { width: 100%; height: 6px; background: rgba(255,255,255,0.15); border-radius: 3px; overflow: hidden; }
-        .bar-fill { width: 0%; height: 100%; background: #00ffff; box-shadow: 0 0 10px #00ffff; }
-        .bar-txt { font-size: 0.75rem; font-weight: bold; letter-spacing: 1px; color: #d0e0ff; }
-        #debug { position: absolute; bottom: 8px; left: 8px; font-size: 11px; color: #00ff66; background: rgba(0,0,0,0.8); padding: 6px 10px; border-radius: 4px; display: none; border: 1px solid #00ff6644; }
-        #debug.active { display: block; }
+        * {
+            box-sizing: border-box;
+            user-select: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        body,
+        html {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: #05050f;
+            font-family: monospace;
+            color: #fff;
+        }
+
+        #canvas-wrap {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #030308;
+        }
+
+        canvas {
+            display: block;
+            touch-action: none;
+            width: 100%;
+            height: 100%;
+        }
+
+        .screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: rgba(5, 5, 15, 0.95);
+            z-index: 10;
+            transition: opacity 0.15s;
+        }
+
+        .screen.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            font-style: italic;
+            color: #00ffff;
+            text-shadow: 0 0 20px #00ffff, 0 0 40px #ff007f;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        p.sub {
+            font-size: 1rem;
+            color: #8899cc;
+            letter-spacing: 2px;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            text-align: center;
+        }
+
+        .btn {
+            background: #ff0055;
+            border: 2px solid #ff88cc;
+            color: #fff;
+            font-size: 1.2rem;
+            font-weight: bold;
+            padding: 16px 48px;
+            border-radius: 8px;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            box-shadow: 0 0 20px rgba(255, 0, 85, 0.4);
+        }
+
+        .btn:hover {
+            background: #ff1a6c;
+            transform: scale(1.05);
+        }
+
+        #hud {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        #hud.hidden {
+            display: none;
+        }
+
+        .progress-wrap {
+            width: 400px;
+            max-width: 50vw;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .bar-bg {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .bar-fill {
+            width: 0%;
+            height: 100%;
+            background: #00ffff;
+            box-shadow: 0 0 10px #00ffff;
+        }
+
+        .bar-txt {
+            font-size: 0.85rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+            color: #d0e0ff;
+        }
     </style>
 </head>
+
 <body>
     <div id="canvas-wrap">
         <canvas id="gameCanvas"></canvas>
@@ -41,148 +154,80 @@
         <!-- MAIN MENU -->
         <div id="screen-menu" class="screen">
             <h1>CYBER PULSE</h1>
-            <p class="sub">Arcade Rhythm Platformer</p>
-            <button class="btn" id="btn-play">PLAY</button>
-            <button class="btn sec" id="btn-stages">LEVELS</button>
-        </div>
-
-        <!-- LEVEL SELECT -->
-        <div id="screen-stages" class="screen hidden">
-            <h1>STAGES</h1>
-            <p class="sub">Select Difficulty</p>
-            <div class="grid" id="stage-grid"></div>
-            <button class="btn sec" id="btn-back">BACK</button>
-        </div>
-
-        <!-- PAUSE -->
-        <div id="screen-pause" class="screen hidden">
-            <h1>PAUSED</h1>
-            <button class="btn" id="btn-resume">RESUME</button>
-            <button class="btn sec" id="btn-restart">RESTART</button>
-            <button class="btn sec" id="btn-quit">QUIT</button>
+            <p class="sub">Press Space, Up Arrow, W, or Click to Jump</p>
+            <button class="btn" id="btn-play">PLAY LEVEL</button>
         </div>
 
         <!-- GAMEOVER -->
         <div id="screen-death" class="screen hidden">
             <h1 style="color: #ff0055; text-shadow: 0 0 20px #ff0055;">CRASHED</h1>
             <p id="txt-death" class="sub" style="color: #ff88aa;">Progress: 0%</p>
-            <button class="btn" id="btn-retry">RETRY</button>
-            <button class="btn sec" id="btn-death-menu">MENU</button>
+            <button class="btn" id="btn-retry">TRY AGAIN</button>
         </div>
 
         <!-- COMPLETE -->
         <div id="screen-complete" class="screen hidden">
-            <h1 style="color: #00ffff;">CLEARED!</h1>
-            <p class="sub">100% COMPLETE</p>
-            <button class="btn" id="btn-next">NEXT STAGE</button>
-            <button class="btn sec" id="btn-comp-menu">MENU</button>
+            <h1 style="color: #00ffff;">VICTORY!</h1>
+            <p class="sub">Level Completed Successfully</p>
+            <button class="btn" id="btn-menu">PLAY AGAIN</button>
         </div>
 
         <!-- HUD -->
         <div id="hud" class="hidden">
-            <button class="hud-btn" id="btn-pause-ingame">⏸</button>
             <div class="progress-wrap">
-                <div class="bar-txt" id="txt-title">STAGE 1</div>
-                <div class="bar-bg"><div class="bar-fill" id="bar-fill"></div></div>
+                <div class="bar-txt">CYBER START (SUPER JUMP MODE)</div>
+                <div class="bar-bg">
+                    <div class="bar-fill" id="bar-fill"></div>
+                </div>
             </div>
-            <button class="hud-btn" id="btn-cp" title="Checkpoint">💎</button>
         </div>
-
-        <div id="debug">FPS: <span id="dbg-fps">60</span> | Mode: <span id="dbg-mode">Cube</span></div>
     </div>
 
     <script>
-        // --- SYNTHESIZER AUDIO ENGINE ---
+        // --- STABLE AUDIO SYNTHESIZER ---
         class Synth {
-            constructor() { this.ctx = null; this.timer = null; this.playing = false; }
-            init() { if (!this.ctx) this.ctx = new (window.AudioContext || window.webkitAudioContext)(); }
-            resume() { if (this.ctx && this.ctx.state === 'suspended') this.ctx.resume(); }
-
-            play(bpm) {
-                this.init(); this.resume(); this.stop();
-                this.playing = true;
-                let step = 0;
-                const interval = (60 / bpm) / 4 * 1000;
-
-                this.timer = setInterval(() => {
-                    if (!this.playing || !this.ctx) return;
-                    const t = this.ctx.currentTime;
-                    // Kick
-                    if (step % 16 === 0 || step % 16 === 10) this.tone(120, 30, t, 0.1, 'sine', 0.7);
-                    // Snare
-                    if (step % 32 === 16) this.noise(t, 0.1, 0.3, 800);
-                    // Bass
-                    if (step % 4 === 0) {
-                        const notes = [36, 36, 48, 41];
-                        const f = 440 * Math.pow(2, (notes[(step/4)%notes.length] - 69) / 12);
-                        this.tone(f, f*0.5, t, 0.12, 'sawtooth', 0.25);
-                    }
-                    step = (step + 1) % 64;
-                }, interval);
+            constructor() { this.ctx = null; }
+            init() {
+                if (!this.ctx) {
+                    const AC = window.AudioContext || window.webkitAudioContext;
+                    if (AC) this.ctx = new AC();
+                }
+                if (this.ctx && this.ctx.state === 'suspended') this.ctx.resume();
             }
-
-            stop() { this.playing = false; if (this.timer) clearInterval(this.timer); }
-
-            tone(f1, f2, t, dur, type, vol) {
+            tone(f1, f2, dur, type, vol) {
                 try {
+                    this.init();
+                    if (!this.ctx) return;
+                    const t = this.ctx.currentTime;
                     const o = this.ctx.createOscillator(), g = this.ctx.createGain();
                     o.type = type; o.frequency.setValueAtTime(f1, t); o.frequency.exponentialRampToValueAtTime(Math.max(10, f2), t + dur);
                     g.gain.setValueAtTime(vol, t); g.gain.exponentialRampToValueAtTime(0.001, t + dur);
                     o.connect(g); g.connect(this.ctx.destination); o.start(t); o.stop(t + dur);
-                } catch(e){}
+                } catch (e) { }
             }
-
-            noise(t, dur, vol, hp) {
-                try {
-                    const buf = this.ctx.createBuffer(1, this.ctx.sampleRate * dur, this.ctx.sampleRate);
-                    const d = buf.getChannelData(0);
-                    for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
-                    const src = this.ctx.createBufferSource(); src.buffer = buf;
-                    const filt = this.ctx.createBiquadFilter(); filt.type = 'highpass'; filt.frequency.value = hp;
-                    const g = this.ctx.createGain(); g.gain.setValueAtTime(vol, t); g.gain.exponentialRampToValueAtTime(0.001, t + dur);
-                    src.connect(filt); filt.connect(g); g.connect(this.ctx.destination); src.start(t); src.stop(t + dur);
-                } catch(e){}
-            }
-
-            sfxJump() { this.init(); this.resume(); this.tone(300, 700, this.ctx.currentTime, 0.08, 'sine', 0.3); }
-            sfxPad() { this.init(); this.resume(); this.tone(200, 1000, this.ctx.currentTime, 0.15, 'triangle', 0.4); }
-            sfxDeath() { this.init(); this.resume(); this.noise(this.ctx.currentTime, 0.3, 0.5, 150); }
+            jump() { this.tone(300, 750, 0.1, 'sine', 0.25); }
+            crash() { this.tone(150, 40, 0.25, 'sawtooth', 0.25); }
         }
-
         const audio = new Synth();
 
-        // --- GAME CORE ---
+        // --- GAME ENGINE ---
         class Game {
             constructor() {
                 this.canvas = document.getElementById('gameCanvas');
                 this.ctx = this.canvas.getContext('2d', { alpha: false });
                 this.state = 'MENU';
-                this.levelIdx = 0;
-                this.best = JSON.parse(localStorage.getItem('cp_best') || '[0,0,0,0,0]');
 
                 this.resize();
                 window.addEventListener('resize', () => this.resize());
 
-                this.inputDown = false;
-                this.inputPressed = false;
+                this.jumpRequested = false;
                 this.setupInputs();
 
-                this.lastTime = performance.now();
-                this.acc = 0;
-                this.dt = 1 / 120;
-
-                this.player = { x: 100, y: 400, vy: 0, size: 34, mode: 'CUBE', grav: 1, grounded: false, rot: 0, coyote: 0, buffer: 0 };
-                this.checkpoints = [];
-                this.particles = [];
-                this.debug = false;
-
-                this.stages = [
-                    { name: "1. NEON START", bpm: 128, speed: 10, color: '#00ffff' },
-                    { name: "2. SHIP FLIGHT", bpm: 136, speed: 11, color: '#ff00ff' },
-                    { name: "3. GRAVITY CORE", bpm: 144, speed: 12, color: '#00ff66' },
-                    { name: "4. VECTOR SURGE", bpm: 152, speed: 13, color: '#ffaa00' },
-                    { name: "5. APEX PULSE", bpm: 168, speed: 14.5, color: '#ff0055' }
-                ];
+                this.player = { x: 100, y: 400, vy: 0, size: 36, grounded: false, rot: 0 };
+                this.speed = 2.6; // Relaxed speed
+                this.length = 4000;
+                this.objects = [];
+                this.buildLevel();
             }
 
             resize() {
@@ -197,92 +242,59 @@
             }
 
             setupInputs() {
-                const press = () => { this.inputDown = true; this.inputPressed = true; };
-                const release = () => { this.inputDown = false; };
+                const triggerJump = (e) => {
+                    audio.init();
+                    this.jumpRequested = true;
+                    if (e) e.preventDefault();
+                };
 
                 window.addEventListener('keydown', e => {
-                    if (['Space', 'ArrowUp', 'KeyW'].includes(e.code)) { if (!e.repeat) press(); e.preventDefault(); }
-                    if (e.code === 'KeyF3') { this.debug = !this.debug; document.getElementById('debug').classList.toggle('active', this.debug); }
-                    if (e.code === 'Escape' && this.state === 'PLAYING') this.pause();
+                    if (['Space', 'ArrowUp', 'KeyW'].includes(e.code)) {
+                        if (!e.repeat) triggerJump(e);
+                    }
                 });
-                window.addEventListener('keyup', e => {
-                    if (['Space', 'ArrowUp', 'KeyW'].includes(e.code)) release();
-                });
-                this.canvas.addEventListener('pointerdown', press);
-                this.canvas.addEventListener('pointerup', release);
+                this.canvas.addEventListener('pointerdown', triggerJump);
             }
 
-            loadLevel(idx) {
-                this.levelIdx = idx;
-                const stg = this.stages[idx];
-                this.speed = stg.speed;
-                this.length = 14000;
+            buildLevel() {
                 this.objects = [];
-
+                const gY = 540;
                 let x = 600;
-                const gY = 560;
-                while (x < this.length - 600) {
-                    const r = Math.random();
-                    if (r < 0.3) {
+
+                // Extra wide, highly dodgeable spacing
+                while (x < this.length - 400) {
+                    const pattern = Math.floor(Math.random() * 3);
+                    if (pattern === 0) {
                         this.objects.push({ type: 'SPIKE', x, y: gY });
-                        x += 200;
-                    } else if (r < 0.55) {
-                        this.objects.push({ type: 'BLOCK', x, y: gY - 110, w: 120, h: 40 });
-                        if (Math.random() < 0.4) this.objects.push({ type: 'SPIKE', x: x + 40, y: gY - 150 });
-                        x += 260;
-                    } else if (r < 0.7) {
-                        this.objects.push({ type: 'PAD', x, y: gY });
-                        x += 280;
+                        x += 520; // Massive gap
+                    } else if (pattern === 1) {
+                        this.objects.push({ type: 'SPIKE', x, y: gY });
+                        this.objects.push({ type: 'SPIKE', x: x + 60, y: gY });
+                        x += 600;
                     } else {
-                        const m = ['CUBE', 'SHIP', 'BALL', 'WAVE'][Math.floor(Math.random()*4)];
-                        this.objects.push({ type: 'PORTAL', mode: m, x, y: gY - 180 });
-                        x += 320;
+                        this.objects.push({ type: 'BLOCK', x, y: gY - 110, w: 200, h: 35 });
+                        this.objects.push({ type: 'SPIKE', x: x + 80, y: gY - 150 });
+                        x += 650;
                     }
                 }
+            }
 
+            start() {
+                audio.init();
                 this.player.x = 100;
                 this.player.y = 400;
                 this.player.vy = 0;
-                this.player.mode = 'CUBE';
-                this.player.grav = 1;
+                this.player.grounded = false;
                 this.player.rot = 0;
-                this.checkpoints = [];
-                document.getElementById('txt-title').innerText = stg.name;
-            }
 
-            start(idx) {
-                this.loadLevel(idx);
                 this.state = 'PLAYING';
                 document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
                 document.getElementById('hud').classList.remove('hidden');
-                audio.play(this.stages[idx].bpm);
-            }
-
-            pause() {
-                this.state = 'PAUSED';
-                document.getElementById('screen-pause').classList.remove('hidden');
-                audio.stop();
-            }
-
-            resume() {
-                this.state = 'PLAYING';
-                document.getElementById('screen-pause').classList.add('hidden');
-                audio.play(this.stages[this.levelIdx].bpm);
             }
 
             die() {
                 if (this.state !== 'PLAYING') return;
-                audio.sfxDeath();
-                audio.stop();
-
-                if (this.checkpoints.length > 0) {
-                    const cp = this.checkpoints[this.checkpoints.length - 1];
-                    this.player.x = cp.x; this.player.y = cp.y; this.player.mode = cp.mode; this.player.grav = cp.grav;
-                    this.state = 'PLAYING';
-                    audio.play(this.stages[this.levelIdx].bpm);
-                    return;
-                }
-
+                audio.crash();
                 this.state = 'GAMEOVER';
                 const pct = Math.min(100, Math.floor((this.player.x / this.length) * 100));
                 document.getElementById('txt-death').innerText = `Progress: ${pct}%`;
@@ -292,83 +304,67 @@
 
             complete() {
                 this.state = 'COMPLETE';
-                audio.stop();
-                this.best[this.levelIdx] = 100;
-                localStorage.setItem('cp_best', JSON.stringify(this.best));
                 document.getElementById('screen-complete').classList.remove('hidden');
                 document.getElementById('hud').classList.add('hidden');
             }
 
-            update(dt) {
+            update() {
                 if (this.state !== 'PLAYING') return;
+
                 const p = this.player;
                 p.x += this.speed;
+                const gY = 540;
 
-                const gY = 560, cY = 160;
-                if (p.grounded) p.coyote = 5; else if (p.coyote > 0) p.coyote--;
-                if (this.inputPressed) p.buffer = 6; else if (p.buffer > 0) p.buffer--;
+                // Floatier, higher jump gravity
+                p.vy += 0.48;
+                p.y += p.vy;
 
-                if (p.mode === 'CUBE') {
-                    p.vy += 65.0 * p.grav * dt;
-                    p.y += p.vy;
-                    if (p.y >= gY - p.size/2) {
-                        p.y = gY - p.size/2; p.vy = 0; p.grounded = true;
-                        p.rot = Math.round(p.rot / 90) * 90;
-                    } else {
-                        p.grounded = false;
-                        p.rot += 400 * dt * p.grav;
-                    }
-                    if (p.buffer > 0 && p.coyote > 0) {
-                        p.vy = -18.5 * p.grav;
-                        p.grounded = false; p.coyote = 0; p.buffer = 0;
-                        audio.sfxJump();
-                    }
-                } else if (p.mode === 'SHIP') {
-                    p.vy += (this.inputDown ? -45 : 45) * dt;
-                    p.vy = Math.max(-18, Math.min(18, p.vy));
-                    p.y += p.vy;
-                    p.rot = p.vy * 2;
-                    if (p.y >= gY - p.size/2) { p.y = gY - p.size/2; p.vy = 0; }
-                    if (p.y <= cY) { p.y = cY; p.vy = 0; }
-                } else if (p.mode === 'BALL') {
-                    p.vy += 70.0 * p.grav * dt;
-                    p.y += p.vy;
-                    p.rot += this.speed * 2 * p.grav;
-                    if (p.y >= gY - p.size/2) { p.y = gY - p.size/2; p.grounded = true; }
-                    else if (p.y <= cY) { p.y = cY; p.grounded = true; }
-                    else { p.grounded = false; }
-
-                    if (p.buffer > 0 && p.grounded) {
-                        p.grav *= -1; p.vy = -6 * p.grav; p.buffer = 0;
-                        audio.sfxJump();
-                    }
-                } else if (p.mode === 'WAVE') {
-                    p.vy = this.inputDown ? -this.speed : this.speed;
-                    p.y += p.vy;
-                    p.rot = Math.atan2(p.vy, this.speed) * (180 / Math.PI);
-                    if (p.y >= gY - p.size/2) p.y = gY - p.size/2;
-                    if (p.y <= cY) p.y = cY;
+                // Ground collision
+                if (p.y >= gY - p.size / 2) {
+                    p.y = gY - p.size / 2;
+                    p.vy = 0;
+                    p.grounded = true;
+                    p.rot = Math.round(p.rot / 90) * 90;
+                } else {
+                    p.grounded = false;
+                    p.rot += 3.0;
                 }
 
-                // Collisions
+                // Higher, powerful jump boost
+                if (this.jumpRequested && p.grounded) {
+                    p.vy = -13.5;
+                    p.grounded = false;
+                    audio.jump();
+                }
+                this.jumpRequested = false;
+
+                // Forgiving Hitboxes
                 for (let o of this.objects) {
-                    if (Math.abs(o.x - p.x) > 600) continue;
+                    if (Math.abs(o.x - p.x) > 400) continue;
+
                     if (o.type === 'SPIKE') {
-                        if (p.x + p.size/3 > o.x - 14 && p.x - p.size/3 < o.x + 14 && p.y + p.size/3 > o.y - 30 && p.y - p.size/3 < o.y) this.die();
-                    } else if (o.type === 'BLOCK') {
-                        if (p.x + p.size/2 > o.x && p.x - p.size/2 < o.x + o.w && p.y + p.size/2 > o.y && p.y - p.size/2 < o.y + o.h) {
-                            if (p.vy >= 0 && p.y - p.size/2 <= o.y + 12) { p.y = o.y - p.size/2; p.vy = 0; p.grounded = true; }
-                            else this.die();
+                        if (p.x + p.size / 4 > o.x - 12 && p.x - p.size / 4 < o.x + 12 &&
+                            p.y + p.size / 4 > o.y - 24 && p.y - p.size / 4 < o.y) {
+                            this.die();
                         }
-                    } else if (o.type === 'PAD' && Math.abs(p.x - o.x) < 24 && Math.abs(p.y - o.y) < 24) {
-                        p.vy = -24.0 * p.grav; audio.sfxPad();
-                    } else if (o.type === 'PORTAL' && Math.abs(p.x - o.x) < 24) {
-                        p.mode = o.mode;
+                    } else if (o.type === 'BLOCK') {
+                        if (p.x + p.size / 2.2 > o.x && p.x - p.size / 2.2 < o.x + o.w &&
+                            p.y + p.size / 2.2 > o.y && p.y - p.size / 2.2 < o.y + o.h) {
+                            if (p.vy >= 0 && p.y - p.size / 2 <= o.y + 10) {
+                                p.y = o.y - p.size / 2;
+                                p.vy = 0;
+                                p.grounded = true;
+                            } else {
+                                this.die();
+                            }
+                        }
                     }
                 }
 
-                if (p.x >= this.length) this.complete();
-                this.inputPressed = false;
+                if (p.x >= this.length) {
+                    this.complete();
+                }
+
                 document.getElementById('bar-fill').style.width = Math.min(100, (p.x / this.length) * 100) + '%';
             }
 
@@ -377,91 +373,79 @@
                 ctx.fillStyle = '#040410';
                 ctx.fillRect(0, 0, w, h);
 
-                const camX = this.player.x - w * 0.28;
-                ctx.strokeStyle = '#00ffff15';
-                ctx.lineWidth = 1;
-                const gY = 560;
+                const camX = this.player.x - w * 0.25;
+
+                // Floor grid
+                ctx.strokeStyle = '#00ffff22';
+                ctx.lineWidth = 1.5;
+                const gY = 540;
                 ctx.beginPath();
                 ctx.moveTo(0, gY); ctx.lineTo(w, gY);
-                for (let x = -camX % 50; x < w; x += 50) { ctx.moveTo(x, gY); ctx.lineTo(x, h); }
+                for (let x = -camX % 60; x < w; x += 60) {
+                    ctx.moveTo(x, gY); ctx.lineTo(x, h);
+                }
                 ctx.stroke();
 
                 ctx.save();
                 ctx.translate(-camX, 0);
 
+                // Draw objects
                 for (let o of this.objects) {
                     if (Math.abs(o.x - this.player.x) > w) continue;
+
                     if (o.type === 'SPIKE') {
                         ctx.fillStyle = '#ff0055';
-                        ctx.beginPath(); ctx.moveTo(o.x, o.y - 30); ctx.lineTo(o.x - 15, o.y); ctx.lineTo(o.x + 15, o.y); ctx.fill();
+                        ctx.beginPath();
+                        ctx.moveTo(o.x, o.y - 32);
+                        ctx.lineTo(o.x - 16, o.y);
+                        ctx.lineTo(o.x + 16, o.y);
+                        ctx.fill();
                     } else if (o.type === 'BLOCK') {
-                        ctx.fillStyle = '#0f1432'; ctx.strokeStyle = '#00ffff'; ctx.lineWidth = 2;
-                        ctx.fillRect(o.x, o.y, o.w, o.h); ctx.strokeRect(o.x, o.y, o.w, o.h);
-                    } else if (o.type === 'PAD') {
-                        ctx.fillStyle = '#ffcc00'; ctx.fillRect(o.x - 16, o.y - 5, 32, 5);
-                    } else if (o.type === 'PORTAL') {
-                        ctx.strokeStyle = '#ff00ff'; ctx.lineWidth = 3; ctx.strokeRect(o.x - 15, o.y - 45, 30, 90);
+                        ctx.fillStyle = '#101838';
+                        ctx.strokeStyle = '#00ffff';
+                        ctx.lineWidth = 2;
+                        ctx.fillRect(o.x, o.y, o.w, o.h);
+                        ctx.strokeRect(o.x, o.y, o.w, o.h);
                     }
                 }
 
+                // Draw Player
                 const p = this.player;
                 ctx.save();
                 ctx.translate(p.x, p.y);
                 ctx.rotate((p.rot * Math.PI) / 180);
-                ctx.fillStyle = '#fff'; ctx.strokeStyle = this.stages[this.levelIdx].color; ctx.lineWidth = 3;
-                if (p.mode === 'SHIP' || p.mode === 'WAVE') {
-                    ctx.beginPath(); ctx.moveTo(14,0); ctx.lineTo(-14,-9); ctx.lineTo(-14,9); ctx.closePath(); ctx.fill(); ctx.stroke();
-                } else if (p.mode === 'BALL') {
-                    ctx.beginPath(); ctx.arc(0, 0, p.size/2, 0, Math.PI*2); ctx.fill(); ctx.stroke();
-                } else {
-                    ctx.fillRect(-p.size/2, -p.size/2, p.size, p.size); ctx.strokeRect(-p.size/2, -p.size/2, p.size, p.size);
-                }
-                ctx.restore();
+                ctx.fillStyle = '#ffffff';
+                ctx.strokeStyle = '#00ffff';
+                ctx.lineWidth = 3;
+                ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+                ctx.strokeRect(-p.size / 2, -p.size / 2, p.size, p.size);
                 ctx.restore();
 
-                if (this.debug) document.getElementById('dbg-mode').innerText = p.mode;
+                ctx.restore();
             }
 
-            loop(t) {
-                const fTime = (t - this.lastTime) / 1000;
-                this.lastTime = t;
-                if (fTime < 0.2) {
-                    this.acc += fTime;
-                    while (this.acc >= this.dt) { this.update(this.dt); this.acc -= this.dt; }
-                }
+            loop() {
+                this.update();
                 this.render();
-                requestAnimationFrame(ts => this.loop(ts));
+                requestAnimationFrame(() => this.loop());
             }
         }
 
-        // --- BINDINGS ---
+        // --- INITIALIZATION ---
         window.addEventListener('DOMContentLoaded', () => {
             const game = new Game();
-            const grid = document.getElementById('stage-grid');
 
-            game.stages.forEach((stg, i) => {
-                const card = document.createElement('div');
-                card.className = 'card';
-                card.innerHTML = `<h3>${stg.name}</h3><p>BPM: ${stg.bpm}</p><div class="best">Best: ${game.best[i]}%</div>`;
-                card.onclick = () => game.start(i);
-                grid.appendChild(card);
-            });
+            document.getElementById('btn-play').onclick = () => game.start();
+            document.getElementById('btn-retry').onclick = () => game.start();
+            document.getElementById('btn-menu').onclick = () => {
+                document.getElementById('screen-complete').classList.add('hidden');
+                document.getElementById('screen-menu').classList.remove('hidden');
+                game.state = 'MENU';
+            };
 
-            document.getElementById('btn-play').onclick = () => game.start(0);
-            document.getElementById('btn-stages').onclick = () => { document.getElementById('screen-menu').classList.add('hidden'); document.getElementById('screen-stages').classList.remove('hidden'); };
-            document.getElementById('btn-back').onclick = () => { document.getElementById('screen-stages').classList.add('hidden'); document.getElementById('screen-menu').classList.remove('hidden'); };
-            document.getElementById('btn-pause-ingame').onclick = () => game.pause();
-            document.getElementById('btn-resume').onclick = () => game.resume();
-            document.getElementById('btn-restart').onclick = () => { document.getElementById('screen-pause').classList.add('hidden'); game.start(game.levelIdx); };
-            document.getElementById('btn-quit').onclick = () => { document.getElementById('screen-pause').classList.add('hidden'); document.getElementById('screen-menu').classList.remove('hidden'); document.getElementById('hud').classList.add('hidden'); audio.stop(); game.state = 'MENU'; };
-            document.getElementById('btn-retry').onclick = () => { document.getElementById('screen-death').classList.add('hidden'); game.start(game.levelIdx); };
-            document.getElementById('btn-death-menu').onclick = () => { document.getElementById('screen-death').classList.add('hidden'); document.getElementById('screen-menu').classList.remove('hidden'); game.state = 'MENU'; };
-            document.getElementById('btn-next').onclick = () => { document.getElementById('screen-complete').classList.add('hidden'); game.start((game.levelIdx + 1) % game.stages.length); };
-            document.getElementById('btn-comp-menu').onclick = () => { document.getElementById('screen-complete').classList.add('hidden'); document.getElementById('screen-menu').classList.remove('hidden'); game.state = 'MENU'; };
-            document.getElementById('btn-cp').onclick = () => { game.checkpoints.push({ x: game.player.x, y: game.player.y, mode: game.player.mode, grav: game.player.grav }); };
-
-            requestAnimationFrame(t => game.loop(t));
+            requestAnimationFrame(() => game.loop());
         });
     </script>
 </body>
+
 </html>
