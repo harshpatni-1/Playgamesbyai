@@ -1,0 +1,7 @@
+{
+  "version": 2,
+  "framework": "other",
+  "installCommand": "npm install --ignore-scripts --no-audit --no-fund",
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist"
+}
