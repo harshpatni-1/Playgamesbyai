@@ -1,7 +1,8 @@
 import { cpSync, existsSync, mkdirSync, readdirSync, rmSync, statSync } from 'node:fs';
 import { join, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const root = process.cwd();
+const root = fileURLToPath(new URL('.', import.meta.url));
 const out = join(root, 'dist');
 const requiredGames = [
   'grok-neon-pulse.html',
