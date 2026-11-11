@@ -11,6 +11,10 @@ This is a static HTML project with four standalone rhythm-platform games. It nee
 
 If this Vercel project previously used a different app, check **Settings → Build & Development Settings → Root Directory**: it must point to the directory containing this `package.json`, not a parent folder or a `games` subfolder. Redeploy after changing it.
 
+## Vercel Web Analytics
+
+The site is plain HTML, so it uses Vercel's browser script (`/_vercel/insights/script.js`) rather than the React-only `@vercel/analytics/react` component. The analytics bootstrap and script are included on the homepage and every game page. To start collecting data, open the Vercel project, enable **Web Analytics** in its **Analytics** tab, then redeploy. The build fails if an output page is missing the analytics integration.
+
 ## Deploy with Vercel CLI
 
 Install Node.js 20+, unzip this project, open a terminal in the folder containing `package.json`, then run:

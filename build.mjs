@@ -31,4 +31,10 @@ for (const file of requiredGames) {
   if (!existsSync(join(out, 'games', file))) throw new Error(`Build did not include ${file}`);
 }
 const outputs = [join(out, 'index.html'), ...readdirSync(join(out, 'games')).map(f => join(out, 'games', f))];
+for (const file of outputs) {
+  const html = await (await import('node:fs/promises')).readFile(file, 'utf8');
+  if (!html.includes('window.va = window.va || function') || !html.includes('/_vercel/insights/script.js')) {
+    throw new Error(`Vercel Web Analytics is missing from ${file}`);
+  }
+}
 console.log(`Build complete: ${outputs.length} HTML files copied to ${resolve(out)}.`);
