@@ -13,7 +13,7 @@ If this Vercel project previously used a different app, check **Settings → Bui
 
 ## Vercel Web Analytics
 
-The site is plain HTML, so it uses Vercel's browser script (`/_vercel/insights/script.js`) rather than the React-only `@vercel/analytics/react` component. The analytics bootstrap and script are included on the homepage and every game page. To start collecting data, open the Vercel project, enable **Web Analytics** in its **Analytics** tab, then redeploy. The build fails if an output page is missing the analytics integration.
+The site is plain HTML, so it uses Vercel's browser script (`/_vercel/insights/script.js`) rather than a framework component. No `@vercel/analytics` npm package is needed for this HTML integration. Each page, including the 404 page, must contain one bootstrap followed by one deferred analytics script. To start collecting data, open the Vercel project, enable **Web Analytics** in its **Analytics** tab, then redeploy; Vercel serves the tracking endpoint only when the feature is enabled. The build fails if any output page is missing or duplicates the integration.
 
 ## Deploy with Vercel CLI
 
@@ -48,3 +48,4 @@ Or use any static file server pointed at `dist/`. The four game links are relati
 - All four standalone game files exist.
 - Homepage links reference all four game pages.
 - `dist/` includes the homepage, game pages, and custom 404 page.
+- Each output HTML page has exactly one Vercel Web Analytics integration.
